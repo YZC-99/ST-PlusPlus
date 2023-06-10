@@ -1,0 +1,8 @@
+/experiments
+/data
+/ckpt
+/outdir
+/pretrained
+push.sh
+data
+.ipynb_checkpoints

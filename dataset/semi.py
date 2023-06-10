@@ -6,6 +6,24 @@ from PIL import Image
 import random
 from torch.utils.data import Dataset
 from torchvision import transforms
+import numpy as np
+
+def preprocess_mask(img):
+    od_mask = np.zeros_like(img)
+    oc_mask = np.zeros_like(img)
+    od_oc_mask = np.zeros_like(img)
+
+    od_mask[img == 128] = 1
+    od_mask[img == 0] = 1
+
+    oc_mask[img == 0] = 1
+
+    od_oc_mask[img == 128] = 1
+    od_oc_mask[img == 0] = 2
+    return {'refuge_od':od_mask,
+            'refuge_oc':oc_mask,
+            'refuge_od_oc':od_oc_mask}
+
 
 
 class SemiDataset(Dataset):
@@ -56,6 +74,9 @@ class SemiDataset(Dataset):
         if self.mode == 'val' or self.mode == 'label':
             mask = Image.open(os.path.join(self.root, id.split(' ')[1]))
             img, mask = normalize(img, mask)
+            if self.name in ['refuge_od', 'refuge_oc', 'refuge_od_oc']:
+                masks = preprocess_mask(mask)
+                mask = masks[self.name]
             return img, mask, id
 
         if self.mode == 'train' or (self.mode == 'semi_train' and id in self.labeled_ids):
@@ -81,6 +102,9 @@ class SemiDataset(Dataset):
 
         img, mask = normalize(img, mask)
 
+        if self.name in ['refuge_od','refuge_oc','refuge_od_oc']:
+            masks = preprocess_mask(mask)
+            mask = masks[self.name]
         return img, mask
 
     def __len__(self):

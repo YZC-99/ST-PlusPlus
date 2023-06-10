@@ -24,7 +24,7 @@ def parse_args():
 
     # basic settings
     parser.add_argument('--data-root', type=str, required=True)
-    parser.add_argument('--dataset', type=str, choices=['pascal', 'cityscapes'], default='pascal')
+    parser.add_argument('--dataset', type=str, choices=['refuge_od','refuge_oc','refuge_od_oc','pascal', 'cityscapes'], default='pascal')
     parser.add_argument('--batch-size', type=int, default=16)
     parser.add_argument('--lr', type=float, default=None)
     parser.add_argument('--epochs', type=int, default=None)
@@ -222,8 +222,11 @@ def train(model, trainloader, valloader, criterion, optimizer, args):
             optimizer.param_groups[1]["lr"] = lr * 1.0 if args.model == 'deeplabv2' else lr * 10.0
 
             tbar.set_description('Loss: %.3f' % (total_loss / (i + 1)))
-
-        metric = meanIOU(num_classes=21 if args.dataset == 'pascal' else 19)
+        if args.dataset == 'pascal'：
+            num_classes=21
+        elif args.dataset == 'refuge_od' or args.dataset == 'refuge_oc':
+            num_classes = 2
+        metric = meanIOU(num_classes=num_classes)
 
         model.eval()
         tbar = tqdm(valloader)
@@ -278,7 +281,11 @@ def select_reliable(models, dataloader, args):
 
             mIOU = []
             for i in range(len(preds) - 1):
-                metric = meanIOU(num_classes=21 if args.dataset == 'pascal' else 19)
+                        if args.dataset == 'pascal'：
+                            num_classes=21
+                        elif args.dataset == 'refuge_od' or args.dataset == 'refuge_oc':
+                            num_classes = 2
+                metric = meanIOU(num_classes=num_classes)
                 metric.add_batch(preds[i], preds[-1])
                 mIOU.append(metric.evaluate()[-1])
 
@@ -297,8 +304,11 @@ def select_reliable(models, dataloader, args):
 def label(model, dataloader, args):
     model.eval()
     tbar = tqdm(dataloader)
-
-    metric = meanIOU(num_classes=21 if args.dataset == 'pascal' else 19)
+    if args.dataset == 'pascal'：
+        num_classes=21
+    elif args.dataset == 'refuge_od' or args.dataset == 'refuge_oc':
+        num_classes = 2
+    metric = meanIOU(num_classes=num_classes)
     cmap = color_map(args.dataset)
 
     with torch.no_grad():
@@ -322,11 +332,11 @@ if __name__ == '__main__':
     args = parse_args()
 
     if args.epochs is None:
-        args.epochs = {'pascal': 80, 'cityscapes': 240}[args.dataset]
+        args.epochs = {'refuge_od': 80,'pascal': 80, 'cityscapes': 240}[args.dataset]
     if args.lr is None:
-        args.lr = {'pascal': 0.001, 'cityscapes': 0.004}[args.dataset] / 16 * args.batch_size
+        args.lr = {'refuge_od':0.001,'pascal': 0.001, 'cityscapes': 0.004}[args.dataset] / 16 * args.batch_size
     if args.crop_size is None:
-        args.crop_size = {'pascal': 321, 'cityscapes': 721}[args.dataset]
+        args.crop_size = {'refuge_od':512,'pascal': 321, 'cityscapes': 721}[args.dataset]
 
     print()
     print(args)
