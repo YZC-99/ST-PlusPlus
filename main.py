@@ -222,7 +222,7 @@ def train(model, trainloader, valloader, criterion, optimizer, args):
             optimizer.param_groups[1]["lr"] = lr * 1.0 if args.model == 'deeplabv2' else lr * 10.0
 
             tbar.set_description('Loss: %.3f' % (total_loss / (i + 1)))
-        if args.dataset == 'pascal'：
+        if args.dataset == 'pascal':
             num_classes=21
         elif args.dataset == 'refuge_od' or args.dataset == 'refuge_oc':
             num_classes = 2
@@ -281,10 +281,10 @@ def select_reliable(models, dataloader, args):
 
             mIOU = []
             for i in range(len(preds) - 1):
-                        if args.dataset == 'pascal'：
-                            num_classes=21
-                        elif args.dataset == 'refuge_od' or args.dataset == 'refuge_oc':
-                            num_classes = 2
+                if args.dataset == 'pascal':
+                    num_classes=21
+                elif args.dataset == 'refuge_od' or args.dataset == 'refuge_oc':
+                    num_classes = 2
                 metric = meanIOU(num_classes=num_classes)
                 metric.add_batch(preds[i], preds[-1])
                 mIOU.append(metric.evaluate()[-1])
@@ -304,7 +304,7 @@ def select_reliable(models, dataloader, args):
 def label(model, dataloader, args):
     model.eval()
     tbar = tqdm(dataloader)
-    if args.dataset == 'pascal'：
+    if args.dataset == 'pascal':
         num_classes=21
     elif args.dataset == 'refuge_od' or args.dataset == 'refuge_oc':
         num_classes = 2
