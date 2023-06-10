@@ -77,6 +77,7 @@ class SemiDataset(Dataset):
             if self.name in ['refuge_od', 'refuge_oc', 'refuge_od_oc']:
                 masks = preprocess_mask(mask)
                 mask = masks[self.name]
+                img, mask = resize(img, mask, 512, (0.5, 2.0))
             return img, mask, id
 
         if self.mode == 'train' or (self.mode == 'semi_train' and id in self.labeled_ids):
@@ -105,6 +106,7 @@ class SemiDataset(Dataset):
         if self.name in ['refuge_od','refuge_oc','refuge_od_oc']:
             masks = preprocess_mask(mask)
             mask = masks[self.name]
+
         return img, mask
 
     def __len__(self):
