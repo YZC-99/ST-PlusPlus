@@ -1,3 +1,4 @@
+
 export semi_setting='pascal/1_8/split_0'
 
 CUDA_VISIBLE_DEVICES=0,1 python -W ignore main.py \
@@ -12,13 +13,24 @@ CUDA_VISIBLE_DEVICES=0,1 python -W ignore main.py \
   
 
 export semi_setting='refuge_od/1_4/split_0'
-CUDA_VISIBLE_DEVICES=0,1 python -W ignore main.py \
+CUDA_VISIBLE_DEVICES=0,1 python -W ignore main1.py \
   --dataset refuge_od --data-root ./data/fundus_datasets/od_oc/REFUGE/ \
   --batch-size 16 --backbone resnet50 --model deeplabv3plus \
   --labeled-id-path dataset/splits/$semi_setting/labeled.txt \
   --unlabeled-id-path dataset/splits/$semi_setting/unlabeled.txt \
-  --pseudo-mask-path outdir/pseudo_masks/$semi_setting \
-  --save-path outdir/models/$semi_setting \
+  --pseudo-mask-path experiments/refuge/pseudo_masks/$semi_setting \
+  --save-path experiments/refuge/models/$semi_setting \
+  --epochs 100
+
+export semi_setting='refuge_od/1_4/split_0'
+CUDA_VISIBLE_DEVICES=0,1 python -W ignore main2.py \
+  --dataset refuge_od --data-root ./data/fundus_datasets/od_oc/REFUGE/ \
+  --batch-size 16 --backbone resnet50 --model deeplabv3plus \
+  --labeled-id-path dataset/splits/$semi_setting/labeled.txt \
+  --unlabeled-id-path dataset/splits/$semi_setting/unlabeled.txt \
+  --pseudo-mask-path experiments/refuge/pseudo_masks/$semi_setting \
+  --save-path experiments/refuge/models/$semi_setting \
+  --epochs 100
 
 
 export semi_setting='refuge_oc/1_4/split_0'
@@ -30,3 +42,13 @@ CUDA_VISIBLE_DEVICES=0,1 python -W ignore main.py \
   --pseudo-mask-path outdir/pseudo_masks/$semi_setting \
   --save-path outdir/models/$semi_setting \
   --lr 0.002
+
+
+export semi_setting='refuge_domain/1_5'
+CUDA_VISIBLE_DEVICES=0,1 python -W ignore refer.py \
+  --dataset refuge_od --data-root ./data/fundus_datasets/od_oc/REFUGE/ \
+  --batch-size 16 --backbone resnet50 --model deeplabv3plus \
+  --labeled-id-path dataset/splits/$semi_setting/labeled.txt \
+  --unlabeled-id-path dataset/splits/$semi_setting/unlabeled.txt \
+  --pseudo-mask-path outdir/pseudo_masks/$semi_setting \
+  --save-path outdir/models/$semi_setting

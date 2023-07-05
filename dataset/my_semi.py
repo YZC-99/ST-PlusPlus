@@ -11,26 +11,41 @@ from torchvision import transforms
 import numpy as np
 import scipy.io
 
-def preprocess_mask(img):
-    od_mask = np.zeros_like(img)
-    oc_mask = np.zeros_like(img)
-    od_oc_mask = np.zeros_like(img)
+def get_labels(task,mask_path):
+    '''
+    :param task:
+    :param org_mask: 原始的mask：0背景，1视盘，2视杯
+    :return:
+    '''
+    if mask_path.endswith('mat'):
+        org_mask = scipy.io.loadmat(mask_path)['maskFull']
+        if task == 'od':
+            org_mask[org_mask > 0] = 1
+            return Image.fromarray(org_mask)
+        elif task == 'oc':
+            org_mask[org_mask == 1] = 0
+            org_mask[org_mask == 2] = 1
+            return Image.fromarray(org_mask)
+        else:
+            return Image.fromarray(org_mask)
+    else:
+        org_mask = Image.open(mask_path).convert('L')
+        org_mask = np.array(org_mask)
 
-    od_mask[img == 128] = 1
-    od_mask[img == 0] = 1
-
-    oc_mask[img == 0] = 1
-
-    od_oc_mask[img == 128] = 1
-    od_oc_mask[img == 0] = 2
-    return {'refuge_od':od_mask,
-            'refuge_oc':oc_mask,
-            'refuge_od_oc':od_oc_mask}
+    mask = np.zeros_like(org_mask)
+    if task == 'od':
+        mask[org_mask > 0] = 1
+        return Image.fromarray(mask)
+    elif task == 'oc':
+        mask[org_mask == 2] = 1
+        return Image.fromarray(mask)
+    else:
+        return org_mask
 
 
 
 class SemiDataset(Dataset):
-    def __init__(self, name, root, mode, size, labeled_id_path=None, unlabeled_id_path=None, pseudo_mask_path=None):
+    def __init__(self,task, name, root, mode, size, labeled_id_path=None, unlabeled_id_path=None, pseudo_mask_path=None,cfg=None):
         """
         :param name: dataset name, pascal or cityscapes
         :param root: root path of the dataset.
@@ -44,13 +59,17 @@ class SemiDataset(Dataset):
         :param unlabeled_id_path: path of unlabeled image ids, needed in semi_train or label mode.
         :param pseudo_mask_path: path of generated pseudo masks, needed in semi_train mode.
         """
+        self.cfg = cfg
+        self.task = task
         self.name = name
         self.root = root
         self.mode = mode
         self.size = size
-
         self.pseudo_mask_path = pseudo_mask_path
 
+        '''
+        细节，如果标记数据少于未标记数据，那么在此过程中，会自动复制样本，直到与未标记数量相当，因此100-700，会变成700-700
+        '''
         if mode == 'semi_train':
             with open(labeled_id_path, 'r') as f:
                 self.labeled_ids = f.read().splitlines()
@@ -71,7 +90,6 @@ class SemiDataset(Dataset):
                 id_path = unlabeled_id_path
             elif mode == 'train':
                 id_path = labeled_id_path
-
             with open(id_path, 'r') as f:
                 self.ids = f.read().splitlines()
 
@@ -81,71 +99,48 @@ class SemiDataset(Dataset):
         mask_path = os.path.join(self.root, id.split(' ')[1])
 
         if self.mode == 'val' or self.mode == 'label':
-            if mask_path.endswith('.mat'):
-                mask = scipy.io.loadmat(mask_path)['maskFull']
-                mask = Image.fromarray(mask)
-            else:
-                mask = Image.open(mask_path)
+
+            mask = get_labels(self.task,mask_path)
             img, mask = resize(img, mask, 512)
             img, mask = normalize(img, mask)
-            if mask_path.endswith('.tif'):
-                od_mask = np.zeros_like(mask)
-                od_mask[mask == 255] = 1
-                mask = od_mask
-            else:
-                if self.name in ['refuge_od', 'refuge_oc', 'refuge_od_oc']:
-                    masks = preprocess_mask(mask)
-                    mask = masks[self.name]
-                else:
-                    masks = preprocess_mask(mask)
-                    mask = masks['refuge_od']
             return img, mask, id
 
         if self.mode == 'train' or (self.mode == 'semi_train' and id in self.labeled_ids):
-            if mask_path.endswith('.mat'):
-                mask = scipy.io.loadmat(mask_path)['maskFull']
-                mask = Image.fromarray(mask)
-            else:
-                mask = Image.open(mask_path)
+            mask = get_labels(self.task, mask_path)
+
         else:
             # mode == 'semi_train' and the id corresponds to unlabeled image
             fname = os.path.basename(id.split(' ')[1])
-            mask = Image.open(os.path.join(self.pseudo_mask_path, fname))
-
+            mask = get_labels(self.task, os.path.join(self.pseudo_mask_path, fname))
         # basic augmentation on all training images
-        base_size = 400 if self.name == 'pascal' else 2048
         img, mask = resize(img, mask, self.size)
         # img, mask = crop(img, mask, self.size)
         img, mask = hflip(img, mask, p=0.5)
 
         # strong augmentation on unlabeled images
         if self.mode == 'semi_train' or self.mode == 'src_tgt_train' and id in self.unlabeled_ids:
-            if random.random() < 0.8:
+            if self.cfg.aug.strong.Not:
+                img, mask = normalize(img, mask)
+                return img, mask
+
+            if self.cfg == None or self.cfg.aug.strong.default:
+                if random.random() < 0.8:
+                    img = transforms.ColorJitter(0.5, 0.5, 0.5, 0.25)(img)
+                img = transforms.RandomGrayscale(p=0.2)(img)
+                img = blur(img, p=0.5)
+                img, mask = cutout(img, mask, p=0.5)
+            if self.cfg.aug.strong.ColorJitter:
                 img = transforms.ColorJitter(0.5, 0.5, 0.5, 0.25)(img)
-            img = transforms.RandomGrayscale(p=0.2)(img)
-            img = blur(img, p=0.5)
-            img, mask = cutout(img, mask, p=0.5)
+            if self.cfg.aug.strong.RandomGrayscale:
+                img = transforms.RandomGrayscale(p=1.0)(img)
+            if self.cfg.aug.strong.blur:
+                img = blur(img, p=1.0)
+            if self.cfg.aug.strong.cutout:
+                img, mask = cutout(img, mask, p=1.0)
+
             img, mask = normalize(img, mask)
-            od_mask = np.zeros_like(mask)
-            od_mask[mask == 1] = 1
-            return img, od_mask
-
-
+            return img, mask
         img, mask = normalize(img, mask)
-
-        if mask_path.endswith('.tif'):
-            od_mask = np.zeros_like(mask)
-            od_mask[mask == 255] = 1
-            mask = od_mask
-        else:
-            if self.name in ['refuge_od','refuge_oc','refuge_od_oc']:
-                masks = preprocess_mask(mask)
-                mask = masks[self.name]
-            # elif self.name == 'refuge_domain':
-            else:
-                masks = preprocess_mask(mask)
-                mask = masks['refuge_od']
-
         return img, mask
 
     def __len__(self):

@@ -1,0 +1,21 @@
+export semi_setting='Train_REFUGE_Val_GAMMA/1_6/split_0'
+CUDA_VISIBLE_DEVICES=0,1 python -W ignore main.py \
+  --dataset Train_REFUGE_Val_GAMMA --data-root ./data/fundus_datasets/od_oc/WACV/REFUGE_cross_new/ \
+  --batch-size 16 --backbone resnet50 --model deeplabv3plus \
+  --labeled-id-path dataset/splits/$semi_setting/labeled.txt \
+  --unlabeled-id-path dataset/splits/$semi_setting/unlabeled.txt \
+  --pseudo-mask-path experiments/Train_REFUGE_Val_GAMMA/pseudo_masks/$semi_setting \
+  --save-path experiments/Train_REFUGE_Val_GAMMA/models/$semi_setting \
+  --epochs 50
+
+export semi_setting='Train_REFUGE_Val_GAMMA/1_6/split_0'
+CUDA_VISIBLE_DEVICES=0,1 python -W ignore main1.py \
+  --dataset Train_REFUGE_Val_GAMMA --data-root ./data/fundus_datasets/od_oc/WACV/REFUGE_cross_new/ \
+  --batch-size 16 --backbone resnet50 --model deeplabv3plus \
+  --labeled-id-path dataset/splits/$semi_setting/labeled.txt \
+  --unlabeled-id-path dataset/splits/$semi_setting/unlabeled.txt \
+  --pseudo-mask-path experiments/Train_REFUGE_Val_GAMMA/pseudo_masks/$semi_setting \
+  --save-path experiments/Train_REFUGE_Val_GAMMA/models/$semi_setting \
+  --epochs 50
+
+

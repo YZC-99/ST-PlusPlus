@@ -3,7 +3,8 @@ from PIL import Image, ImageOps, ImageFilter
 import random
 import torch
 from torchvision import transforms
-
+from torchvision import transforms as T
+from torchvision.transforms import functional as F
 
 def crop(img, mask, size):
     # padding height or width if smaller than cropping size
@@ -38,15 +39,33 @@ def normalize(img, mask=None):
     """
     img = transforms.Compose([
         transforms.ToTensor(),
-        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+        # transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+        transforms.Normalize((0.0,), (1.0,))
     ])(img)
     if mask is not None:
         mask = torch.from_numpy(np.array(mask)).long()
         return img, mask
     return img
 
+def resize(img, mask,size):
+    img = img.resize((size, size), Image.BILINEAR)
+    mask = mask.resize((size, size), Image.NEAREST)
+    return img, mask
 
-def resize(img, mask, base_size, ratio_range):
+# class torch_resize(object):
+#     def __init__(self, size):
+#         self.size = size
+#
+#     def __call__(self, image, target):
+#         size = self.size
+#         # 这里size传入的是int类型，所以是将图像的最小边长缩放到size大小
+#         image = F.resize(image, [size,size])
+#         # 这里的interpolation注意下，在torchvision(0.9.0)以后才有InterpolationMode.NEAREST
+#         # 如果是之前的版本需要使用PIL.Image.NEAREST
+#         target = F.resize(target, [size,size], interpolation=T.InterpolationMode.NEAREST)
+#         return image, target
+
+def randomresize(img, mask, base_size, ratio_range):
     w, h = img.size
     long_side = random.randint(int(base_size * ratio_range[0]), int(base_size * ratio_range[1]))
 

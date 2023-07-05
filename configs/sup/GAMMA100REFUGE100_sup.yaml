@@ -1,0 +1,24 @@
+prototype_path: 'experiments/GAMMA100REFUGE100_sup/prototypes'
+info:
+  setting: 'od_val_refuge/1_7/100gamma'
+  description: 'GAMMA100REFUGE100_sup'
+MODEL:
+  sup: False
+  NUM_CLASSES: 2
+  batch_size: 8
+  epochs: 100
+  lr: 0.002 # 0.004/16*batch_size
+  crop_size: 512
+  task: 'od'
+  data_root: './data/fundus_datasets/od_oc/WACV/REFUGE_cross_new/'
+  dataset: 'sup'
+  backbone: 'resnet50'
+  model: 'deeplabv3plus'
+  labeled_id_path: 'dataset/splits/sup/GAMMA100_labeled.txt'
+  labeled_id_path_2: 'dataset/splits/sup/REFUGE100_labeled.txt'
+  save_path: 'experiments/GAMMA100REFUGE100_sup/models'
+  sup_uda: True #全监督分割情况下的无监督域适应
+  stage1: False #训练模型
+  stage2: True
+  stage2.prototype: True #计算prototype
+  stage1_ckpt_path: "experiments/GAMMA100_sup/models/train_mIoUTdeeplabv3plus_resnet50_90.10.pth"

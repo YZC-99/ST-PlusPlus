@@ -1,0 +1,22 @@
+info:
+  setting: 'od_val_refuge/1_7/100gamma'
+  description: 'sup_100REFUGE'
+MODEL:
+  sup: True
+  NUM_CLASSES: 2
+  batch_size: 8
+  epochs: 100
+  lr: 0.002 # 0.004/16*batch_size
+  crop_size: 512
+  dataset: 'sup'
+  data_root: './data/fundus_datasets/od_oc/WACV/REFUGE_cross_new/'
+  backbone: 'resnet50'
+  model: 'deeplabv3plus'
+  labeled_id_path: 'dataset/splits/sup/REFUGE100_labeled.txt'
+
+  save_path: 'experiments/REFUGE100_sup/models'
+  stage1: ''
+  stage2: ''
+  stage3: ''
+  stage4: ''
+  stage5: ''

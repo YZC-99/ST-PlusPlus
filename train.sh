@@ -1,6 +1,6 @@
-export od_semi_setting='refuge_od/1_4/split_0'
-export oc_semi_setting='refuge_oc/1_4/split_0'
-export od_oc_semi_setting='refuge_od_oc/1_4/split_0'
+export od_semi_setting='refuge_od/1_6/split_0'
+export oc_semi_setting='refuge_oc/1_6/split_0'
+export od_oc_semi_setting='refuge_od_oc/1_6/split_0'
 
 CUDA_VISIBLE_DEVICES=0,1 python -W ignore main.py \
   --dataset refuge_od --data-root ./data/fundus_datasets/od_oc/REFUGE/ \

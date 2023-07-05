@@ -1,0 +1,65 @@
+
+#######100refuge
+export semi_setting='od_val_refuge/1_7/100refuge'
+CUDA_VISIBLE_DEVICES=0,1 python -W ignore main.py \
+  --dataset od_val_refuge --data-root ./data/fundus_datasets/od_oc/WACV/REFUGE_cross_new/ \
+  --batch-size 8 --backbone resnet50 --model deeplabv3plus \
+  --labeled-id-path dataset/splits/$semi_setting/labeled.txt \
+  --unlabeled-id-path dataset/splits/$semi_setting/unlabeled.txt \
+  --pseudo-mask-path experiments/pseudo_masks/$semi_setting \
+  --save-path experiments/models/$semi_setting \
+  --epochs 150 \
+  --lr 0.002
+
+#######100refuge-Plus
+export semi_setting='od_val_refuge/1_7/100refuge'
+CUDA_VISIBLE_DEVICES=0,1 python -W ignore main.py \
+  --dataset od_val_refuge --data-root ./data/fundus_datasets/od_oc/WACV/REFUGE_cross_new/ \
+  --batch-size 8 --backbone resnet50 --model deeplabv3plus \
+  --labeled-id-path dataset/splits/$semi_setting/labeled.txt \
+  --unlabeled-id-path dataset/splits/$semi_setting/unlabeled.txt \
+  --pseudo-mask-path experiments_plus/pseudo_masks/$semi_setting \
+  --save-path experiments_plus/models/$semi_setting \
+  --epochs 150 \
+  --lr 0.002 \
+  --plus --reliable-id-path experiments_plus/reliable_ids/$semi_setting
+
+#######100gamma
+export semi_setting='od_val_refuge/1_7/100gamma'
+CUDA_VISIBLE_DEVICES=0,1 python -W ignore main.py \
+  --dataset od_val_refuge --data-root ./data/fundus_datasets/od_oc/WACV/REFUGE_cross_new/ \
+  --batch-size 8 --backbone resnet50 --model deeplabv3plus \
+  --labeled-id-path dataset/splits/$semi_setting/labeled.txt \
+  --unlabeled-id-path dataset/splits/$semi_setting/unlabeled.txt \
+  --pseudo-mask-path experiments/pseudo_masks/$semi_setting \
+  --save-path experiments/models/$semi_setting \
+  --epochs 150 \
+  --lr 0.002
+
+#######100gamma-plus
+export semi_setting='od_val_refuge/1_7/100gamma'
+CUDA_VISIBLE_DEVICES=0,1 python -W ignore main.py \
+  --dataset od_val_refuge --data-root ./data/fundus_datasets/od_oc/WACV/REFUGE_cross_new/ \
+  --batch-size 8 --backbone resnet50 --model deeplabv3plus \
+  --labeled-id-path dataset/splits/$semi_setting/labeled.txt \
+  --unlabeled-id-path dataset/splits/$semi_setting/unlabeled.txt \
+  --pseudo-mask-path experiments_plus/pseudo_masks/$semi_setting \
+  --save-path experiments_plus/models/$semi_setting \
+  --epochs 150 \
+  --lr 0.002 \
+  --plus --reliable-id-path experiments_plus/reliable_ids/$semi_setting
+
+#######100bosch
+export semi_setting='od_val_refuge/1_7/100bosch'
+CUDA_VISIBLE_DEVICES=0,1 python -W ignore main.py \
+  --dataset od_val_refuge --data-root ./data/fundus_datasets/od_oc/WACV/REFUGE_cross_new/ \
+  --batch-size 8 --backbone resnet50 --model deeplabv3plus \
+  --labeled-id-path dataset/splits/$semi_setting/labeled.txt \
+  --unlabeled-id-path dataset/splits/$semi_setting/unlabeled.txt \
+  --pseudo-mask-path experiments/pseudo_masks/$semi_setting \
+  --save-path experiments/models/$semi_setting \
+  --epochs 150 \
+  --lr 0.002
+
+
+
