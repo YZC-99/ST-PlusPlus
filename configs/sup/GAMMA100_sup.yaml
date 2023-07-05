@@ -14,9 +14,4 @@ MODEL:
   model: 'deeplabv3plus'
   labeled_id_path: 'dataset/splits/sup/GAMMA100_labeled.txt'
 
-  save_path: 'experiments/GAMMA100_sup/models'
-  stage1: ''
-  stage2: ''
-  stage3: ''
-  stage4: ''
-  stage5: ''
+  save_path: 'experiments/sup/GAMMA100_sup/models'

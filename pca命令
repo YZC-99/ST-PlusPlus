@@ -1,70 +1,8 @@
-CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R1R4_CJ_semi.yaml &
-CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R1R4_None_semi.yaml &
-CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R1R4_B_semi.yaml &
-CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/R1R1R4_semi.yaml
 CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/R1R7R4_semi.yaml
-CUDA_VISIBLE_DEVICES=1,0 python -W ignore main_cfg.py --config-file configs/GAMMA100_sup.yaml
-CUDA_VISIBLE_DEVICES=1 python -W ignore main_cfg.py --config-file configs/testGAMMA100_sup.yaml
-CUDA_VISIBLE_DEVICES=1 python -W ignore main_cfg.py --config-file configs/ORIGA650_sup.yaml
-CUDA_VISIBLE_DEVICES=1 python -W ignore main_cfg.py --config-file configs/REFUGE650_sup.yaml &
-#######100refuge
-export semi_setting='od_val_refuge/1_7/100refuge'
-CUDA_VISIBLE_DEVICES=0,1 python -W ignore main_uda.py \
-  --dataset od_val_refuge --data-root ./data/fundus_datasets/od_oc/WACV/REFUGE_cross_new/ \
-  --batch-size 4 --backbone resnet50 --model deeplabv3plus \
-  --labeled-id-path dataset/splits/$semi_setting/labeled.txt \
-  --unlabeled-id-path dataset/splits/$semi_setting/unlabeled.txt \
-  --pseudo-mask-path experiments_pca/pseudo_masks/od_val_refuge/1_7/100refuge \
-  --save-path experiments_pca/models/$semi_setting \
-  --epochs 150 \
-  --lr 0.001
-
-#######100gamma
-export semi_setting='od_val_refuge/1_7/100gamma'
-export description='lovLoss1_no_out'
-CUDA_VISIBLE_DEVICES=1 python -W ignore main_uda.py \
-  --dataset od_val_refuge --data-root ./data/fundus_datasets/od_oc/WACV/REFUGE_cross_new/ \
-  --batch-size 4 --backbone resnet50 --model deeplabv3plus \
-  --labeled-id-path dataset/splits/$semi_setting/labeled.txt \
-  --unlabeled-id-path dataset/splits/$semi_setting/unlabeled.txt \
-  --pseudo-mask-path experiments_pca/pseudo_masks/od_val_refuge/1_7/100refuge \
-  --save-path experiments_pca/$(date +"%m%d%H%M%S")$description/models/$semi_setting \
-  --epochs 150 \
-  --lambda-lov 1 \
-  --lr 0.001
-
-
-######0630094543based0629135717
-
-export description='0630094543based0629135717'
-
-export description='based0629135717-v2'
-export semi_setting='od_val_refuge/1_7/100gamma'
-export now_date= $(date +"%m%d%H%M%S")
-CUDA_VISIBLE_DEVICES=0,1 python -W ignore main_uda.py \
-  --dataset od_val_refuge --data-root ./data/fundus_datasets/od_oc/WACV/REFUGE_cross_new/ \
-  --batch-size 16 --backbone resnet50 --model deeplabv3plus \
-  --labeled-id-path dataset/splits/$semi_setting/labeled.txt \
-  --unlabeled-id-path dataset/splits/$semi_setting/unlabeled.txt \
-  --pseudo-mask-path experiments_pca/pseudo_masks/od_val_refuge/1_7/100refuge \
-  --tgt-pseudo-mask-path experiments_pca/$now_date$description/tgt_pseudo_masks/$semi_setting \
-  --save-path experiments_pca/$now_date$description/models/$semi_setting \
-  --epochs 150 \
-  --stage5 True \
-  --lr 0.004
-
-
-
-
-####DDP
-export semi_setting='od_val_refuge/1_7/100refuge'
-CUDA_VISIBLE_DEVICES=0,1 torchrun --nproc_per_node=2 ddp_main_uda.py \
-  --dataset od_val_refuge --data-root ./data/fundus_datasets/od_oc/WACV/REFUGE_cross_new/ \
-  --batch-size 4 --backbone resnet50 --model deeplabv3plus \
-  --labeled-id-path dataset/splits/$semi_setting/labeled.txt \
-  --unlabeled-id-path dataset/splits/$semi_setting/unlabeled.txt \
-  --pseudo-mask-path experiments_pca/pseudo_masks/$semi_setting \
-  --save-path experiments_pca/models/$semi_setting \
-  --epochs 150 \
-  --lr 0.001
-
+CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R7R4_None_semi.yaml
+CUDA_VISIBLE_DEVICES=1 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R7R4_B_semi.yaml
+CUDA_VISIBLE_DEVICES=1 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R7R4_CJ_semi.yaml
+CUDA_VISIBLE_DEVICES=2 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R7R4_CO_semi.yaml
+CUDA_VISIBLE_DEVICES=2 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R7R4_RG_semi.yaml
+CUDA_VISIBLE_DEVICES=3 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R7R4_B_CJ_semi.yaml
+CUDA_VISIBLE_DEVICES=3 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R7R4_B_CO_semi.yaml

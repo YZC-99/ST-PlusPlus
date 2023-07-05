@@ -24,6 +24,6 @@ MODEL:
   stage1: False
   stage1_ckpt_path: 'experiments/sup/REFUGE100_sup/models/train_mIoUTdeeplabv3plus_resnet50_93.67.pth'
   stage2: False
-  stage3: True
-  stage4: False
+  stage3: False
+  stage4: True
   stage5: False

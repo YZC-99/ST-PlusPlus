@@ -13,10 +13,5 @@ MODEL:
   backbone: 'resnet50'
   model: 'deeplabv3plus'
   labeled_id_path: 'dataset/splits/sup/REFUGE100_labeled.txt'
-
-  save_path: 'experiments/REFUGE100_sup/models'
-  stage1: ''
-  stage2: ''
-  stage3: ''
-  stage4: ''
-  stage5: ''
+  save_path: 'experiments/sup/REFUGE100_sup/models'
+  logs_path: 'experiments/sup/REFUGE100_sup/logs'
