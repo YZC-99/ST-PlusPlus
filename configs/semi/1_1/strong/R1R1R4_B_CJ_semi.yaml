@@ -9,9 +9,9 @@ aug:
 MODEL:
   sup: False
   NUM_CLASSES: 2
-  batch_size: 8
+  batch_size: 4
   epochs: 100
-  lr: 0.002 # 0.004/16*batch_size
+  lr: 0.001 # 0.004/16*batch_size
   crop_size: 512
   dataset: 'semi'
   data_root: './data/fundus_datasets/od_oc/WACV/REFUGE_cross_new/'

@@ -1,0 +1,26 @@
+#已执行  单个任务耗时 7h
+CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R1R4_None_semi.yaml
+CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R1R4_B_semi.yaml
+CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R1R4_CJ_semi.yaml
+
+
+#待执行
+
+
+###
+CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/1_1/strong/R1R1R4_CO_semi.yaml &
+CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/1_1/strong/R1R1R4_RG_semi.yaml &
+CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/1_1/strong/R1R1R4_B_CJ_semi.yaml
+
+CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/1_1/strong/R1R1R4_B_CO_semi.yaml &
+CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/1_1/strong/R1R1R4_B_RG_semi.yaml &
+CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/1_1/strong/R1R1R4_CJ_CO_semi.yaml
+
+
+CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/1_1/strong/R1R1R4_CJ_RG_semi.yaml &
+CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/1_1/strong/R1R1R4_CO_RG_semi.yaml
+
+
+CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/1_1/strong/R1R1R4_B_CJ_CO_RG_semi.yaml
+
+
