@@ -1,4 +1,4 @@
-#已执行  单个任务耗时
+#已执行  单个任务耗时约5h
 CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/R1R7R4_semi.yaml
 CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R7R4_None_semi.yaml
 CUDA_VISIBLE_DEVICES=1 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R7R4_B_semi.yaml
@@ -9,13 +9,13 @@ CUDA_VISIBLE_DEVICES=3 python -W ignore main_cfg.py --config-file configs/semi/s
 CUDA_VISIBLE_DEVICES=3 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R7R4_B_CO_semi.yaml
 
 #待执行
-CUDA_VISIBLE_DEVICES=3 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R7R4_B_RG_semi.yaml
-CUDA_VISIBLE_DEVICES=3 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R7R4_CJ_CO_semi.yaml
-CUDA_VISIBLE_DEVICES=3 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R7R4_CJ_RG_semi.yaml
-CUDA_VISIBLE_DEVICES=3 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R7R4_CO_RG_semi.yaml
+CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/1_7/strong/R1R7R4_B_RG_semi.yaml
+CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/1_7/strong/R1R7R4_CJ_CO_semi.yaml
+CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/1_7/strong/R1R7R4_CJ_RG_semi.yaml
+CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/1_7/strong/R1R7R4_CO_RG_semi.yaml
 
-CUDA_VISIBLE_DEVICES=3 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R7R4_B_CJ_CO_semi.yaml
-CUDA_VISIBLE_DEVICES=3 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R7R4_B_CJ_RG_semi.yaml
-CUDA_VISIBLE_DEVICES=3 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R7R4_B_CO_RG_semi.yaml
-CUDA_VISIBLE_DEVICES=3 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R7R4_CJ_CO_RG_semi.yaml
+CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/1_7/strong/R1R7R4_B_CJ_CO_semi.yaml
+CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/1_7/strong/R1R7R4_B_CJ_RG_semi.yaml
+CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/1_7/strong/R1R7R4_B_CO_RG_semi.yaml
+CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/semi/1_7/strong/R1R7R4_CJ_CO_RG_semi.yaml
 
