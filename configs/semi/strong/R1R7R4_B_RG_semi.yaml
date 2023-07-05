@@ -5,7 +5,7 @@ aug:
   strong:
     default: False
     blur: True
-    cutout: True
+    RandomGrayscale: True
 MODEL:
   sup: False
   NUM_CLASSES: 2
@@ -20,8 +20,8 @@ MODEL:
   labeled_id_path: 'dataset/splits/semi/REFUGE100_labeled.txt'
   unlabeled_id_path: 'dataset/splits/semi/REFUGE700_unlabeled.txt'
   pseudo_mask_path: 'experiments/semi/R1R7R4_semi/pseudo_masks'
-  logs_path: 'experiments/semi/strong/R1R7R4_B_CO_semi/logs'
-  save_path: 'experiments/semi/strong/R1R7R4_B_CO_semi/models'
+  logs_path: 'experiments/semi/strong/R1R7R4_B_RG_semi/logs'
+  save_path: 'experiments/semi/strong/R1R7R4_B_RG_semi/models'
   stage1: False
   stage1_ckpt_path: 'experiments/sup/REFUGE100_sup/models/train_mIoUTdeeplabv3plus_resnet50_93.67.pth'
   stage2: False

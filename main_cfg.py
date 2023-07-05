@@ -61,19 +61,22 @@ def write_config(cfg, file):
 def main(args):
     cfg.merge_from_file(args.config_file)
 
-    cfg.freeze()
+
     # experiments_path = 'experiments/{}'.format(args.config_file.split('/')[1:-1])
     experiments_path = 'experiments/{}'.format('/'.join(args.config_file.split('/')[1:-1]))
     now_experiment_path = os.path.join(experiments_path,args.config_file.split('/')[-1].split('.')[0])
     now_ex_pseudo_masks_path = os.path.join(now_experiment_path,'pseudo_masks')
     now_ex_prototypes_path = os.path.join(now_experiment_path,'prototypes')
     now_ex_logs_path = os.path.join(now_experiment_path,'logs')
+    now_ex_models_path = os.path.join(now_experiment_path,'models')
     if not os.path.exists(experiments_path):
         os.makedirs(experiments_path)
     if not os.path.exists(now_experiment_path):
         os.makedirs(now_experiment_path)
-    if not os.path.exists(cfg.MODEL.save_path):
-        os.makedirs(cfg.MODEL.save_path)
+    # if not os.path.exists(cfg.MODEL.save_path):
+    #     os.makedirs(cfg.MODEL.save_path)
+    if not os.path.exists(now_ex_models_path):
+        os.makedirs(now_ex_models_path)
     if not os.path.exists(now_ex_pseudo_masks_path):
         os.makedirs(now_ex_pseudo_masks_path)
     if not os.path.exists(now_ex_prototypes_path):
@@ -81,6 +84,10 @@ def main(args):
     if not os.path.exists(now_ex_logs_path):
         os.makedirs(now_ex_logs_path)
 
+
+    cfg.MODEL.logs_path = now_ex_logs_path
+    cfg.MODEL.save_path = now_ex_models_path
+    cfg.freeze()
     # 保存当前配置文件
     cfg_path = os.path.join(now_experiment_path,'config.yaml')
     with open(cfg_path,'w') as f:
