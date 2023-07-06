@@ -45,6 +45,7 @@ _C.MODEL.stage2 = False # 计算prototype或者进行全监督域适应训练
 _C.MODEL.stage2_prototype = False
 _C.MODEL.stage3 = False #打伪标签
 _C.MODEL.stage4 = False #进行半监督训练
+_C.MODEL.stage4_uda = False #进行半监督训练
 _C.MODEL.stage5 = False
 _C.MODEL.NAME = "deeplabv3plus_resnet50"
 _C.MODEL.DEVICE = "cuda"

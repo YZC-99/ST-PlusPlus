@@ -152,6 +152,8 @@ def main(args):
                                      pin_memory=True, num_workers=16, drop_last=True)
             best_model = train(MODE, model, trainloader, valloader, criterion, optimizer, cfg, writer)
 
+
+
 def init_basic_elems(cfg):
 
     model_zoo = {'deeplabv3plus': DeepLabV3Plus, 'pspnet': PSPNet, 'deeplabv2': DeepLabV2}
