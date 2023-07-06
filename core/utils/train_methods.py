@@ -48,7 +48,7 @@ def src_tgt_train(MODE,model,src_trainloader,tar_trainloader, valloader, optimiz
         print("length of src_dataloader:{}".format(len(src_trainloader)))
         print("length of tar_trainloader:{}".format(len(tar_trainloader)))
         tbar = tqdm(list(zip(src_trainloader, tar_trainloader)))
-        for i, ((src_input, src_label), (tgt_input,_)) in enumerate(tbar):
+        for i, ((src_input, src_label), (tgt_input,tgt_label)) in enumerate(tbar):
             optimizer.zero_grad()
             # 源域的数据与标签
             src_input = src_input.cuda(non_blocking=True)
@@ -68,10 +68,10 @@ def src_tgt_train(MODE,model,src_trainloader,tar_trainloader, valloader, optimiz
 
             # supervision loss
             src_pred = F.interpolate(src_out, size=src_size, mode='bilinear', align_corners=True)
-            if cfg.SOLVER.LAMBDA_LOV.lambda_lov > 0:
+            if cfg.SOLVER.LAMBDA_LOV > 0:
                 pred_softmax = F.softmax(src_pred, dim=1)
                 loss_lov = lovasz_softmax(pred_softmax, src_label, ignore=255)
-                loss_sup = ce_criterion(src_pred, src_label) + cfg.SOLVER.LAMBDA_LOV.lambda_lov * loss_lov
+                loss_sup = ce_criterion(src_pred, src_label) + cfg.SOLVER.LAMBDA_LOV * loss_lov
             else:
                 loss_sup = ce_criterion(src_pred, src_label)
 
@@ -83,9 +83,12 @@ def src_tgt_train(MODE,model,src_trainloader,tar_trainloader, valloader, optimiz
             assert not src_feat_mask.requires_grad
             # target mask: constant threshold -- cfg.SOLVER.THRESHOLD
             _, _, Ht_feat, Wt_feat = tgt_feat.size()
-            tgt_out_maxvalue, tgt_mask = torch.max(tgt_out, dim=1)
-            for j in range(cfg.MODEL.NUM_CLASSES):
-                tgt_mask[(tgt_out_maxvalue < cfg.SOLVER.DELTA) * (tgt_mask == j)] = 255
+            if cfg.MODEL.stage2_prototype_useTeacher:
+                tgt_out_maxvalue, tgt_mask = torch.max(tgt_out, dim=1)
+                for j in range(cfg.MODEL.NUM_CLASSES):
+                    tgt_mask[(tgt_out_maxvalue < cfg.SOLVER.DELTA) * (tgt_mask == j)] = 255
+            else:
+                tgt_mask = tgt_label
 
             tgt_feat_mask = F.interpolate(tgt_mask.unsqueeze(0).float(), size=(Ht_feat, Wt_feat), mode='nearest').squeeze(0).long()
             tgt_feat_mask = tgt_feat_mask.contiguous().view(B * Ht_feat * Wt_feat, )

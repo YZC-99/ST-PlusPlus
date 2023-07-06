@@ -87,6 +87,7 @@ def main(args):
 
     cfg.MODEL.logs_path = now_ex_logs_path
     cfg.MODEL.save_path = now_ex_models_path
+    cfg.prototype_path = now_ex_prototypes_path
     cfg.freeze()
     # 保存当前配置文件
     cfg_path = os.path.join(now_experiment_path,'config.yaml')
@@ -123,13 +124,29 @@ def main(args):
             print("==================>计算prototype结束<=====================")
             if cfg.MODEL.sup_uda:
                 print("==================>正在进行无监督域适应训练<=====================")
-                src_dataloader = trainloader
                 tgt_trainset = SemiDataset(cfg.MODEL.task, cfg.MODEL.dataset, cfg.MODEL.data_root, MODE,
                                        cfg.MODEL.crop_size,
                                        cfg.MODEL.labeled_id_path_2,cfg=cfg)
                 tgt_trainloader = DataLoader(tgt_trainset, batch_size=cfg.MODEL.batch_size, shuffle=True,
                                          pin_memory=True, num_workers=8, drop_last=True)
-                model = load_model_ckpt(model,cfg.MODEL.stage1_ckpt_path)
+
+
+                src_trainset = SemiDataset(cfg.MODEL.task, cfg.MODEL.dataset, cfg.MODEL.data_root, MODE,
+                                       cfg.MODEL.crop_size,
+                                       cfg.MODEL.labeled_id_path, cfg=cfg)
+
+                # 补齐数量
+                src_ids_len = len(src_trainset.ids)
+                tgt_ids_len = len(tgt_trainset.ids)
+                if src_ids_len < tgt_ids_len:
+                    num_copies = tgt_ids_len // src_ids_len
+                    src_trainset.ids = src_trainset.ids * num_copies
+                    src_trainset.ids = src_trainset.ids[:tgt_ids_len]
+
+                src_dataloader = DataLoader(src_trainset, batch_size=cfg.MODEL.batch_size, shuffle=True,
+                             pin_memory=True, num_workers=8, drop_last=True)
+                if cfg.MODEL.stage2_prototype_useTeacher:
+                    model = load_model_ckpt(model,cfg.MODEL.stage1_ckpt_path)
                 # print(model)
                 src_tgt_train(MODE,model,src_dataloader,tgt_trainloader,valloader, optimizer, cfg, writer)
         if cfg.MODEL.stage3:

@@ -6,3 +6,6 @@ CUDA_VISIBLE_DEVICES=2 python -W ignore main_cfg.py --config-file configs/semi/s
 CUDA_VISIBLE_DEVICES=2 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R7R4_RG_semi.yaml
 CUDA_VISIBLE_DEVICES=3 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R7R4_B_CJ_semi.yaml
 CUDA_VISIBLE_DEVICES=3 python -W ignore main_cfg.py --config-file configs/semi/strong/R1R7R4_B_CO_semi.yaml
+
+
+CUDA_VISIBLE_DEVICES=0 python -W ignore main_cfg.py --config-file configs/domain_shift_sup/G1R7R4_sup_uda.yaml

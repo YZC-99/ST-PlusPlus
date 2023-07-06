@@ -16,8 +16,3 @@ MODEL:
   labeled_id_path: 'dataset/splits/sup/ORIGA650_labeled.txt'
 
   save_path: 'experiments/ORIGA650_sup/models'
-  stage1: ''
-  stage2: ''
-  stage3: ''
-  stage4: ''
-  stage5: ''

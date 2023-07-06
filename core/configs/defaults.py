@@ -43,6 +43,7 @@ _C.MODEL.stage1 = False #训练教师网络
 _C.MODEL.stage1_ckpt_path = ''
 _C.MODEL.stage2 = False # 计算prototype或者进行全监督域适应训练
 _C.MODEL.stage2_prototype = False
+_C.MODEL.stage2_prototype_useTeacher = True
 _C.MODEL.stage3 = False #打伪标签
 _C.MODEL.stage4 = False #进行半监督训练
 _C.MODEL.stage4_uda = False #进行半监督训练
