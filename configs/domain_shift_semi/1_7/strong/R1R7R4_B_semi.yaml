@@ -1,6 +1,6 @@
 info:
   setting: ''
-  description: 'semi_REFUGE100+REFUGE700'
+  description: 'semi_GAMMA100+REFUGE700'
 aug:
   strong:
     default: False
@@ -16,11 +16,11 @@ MODEL:
   data_root: './data/fundus_datasets/od_oc/WACV/REFUGE_cross_new/'
   backbone: 'resnet50'
   model: 'deeplabv3plus'
-  labeled_id_path: 'dataset/splits/semi/REFUGE100_labeled.txt'
+  labeled_id_path: 'dataset/splits/semi/GAMMA100_labeled.txt'
   unlabeled_id_path: 'dataset/splits/semi/REFUGE700_unlabeled.txt'
-  pseudo_mask_path: 'experiments/semi/R1R7R4_semi/pseudo_masks'
-  logs_path: 'experiments/semi/strong/R1R7R4_B_semi/logs'
-  save_path: 'experiments/semi/strong/R1R7R4_B_semi/models'
+  pseudo_mask_path: 'experiments/domain_shift_semi/G1R7R4_semi/pseudo_masks'
+  logs_path: 'experiments/semi/strong/G1R7R4_B_semi/logs'
+  save_path: 'experiments/semi/strong/G1R7R4_B_semi/models'
   stage1: False
   stage1_ckpt_path: 'experiments/sup/REFUGE100_sup/models/train_mIoUTdeeplabv3plus_resnet50_93.67.pth'
   stage2: False
