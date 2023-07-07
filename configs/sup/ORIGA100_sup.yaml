@@ -1,0 +1,15 @@
+info:
+  description: 'sup_ORIGA100'
+MODEL:
+  sup: True
+  NUM_CLASSES: 2
+  batch_size: 16
+  epochs: 100
+  lr: 0.004 # 0.004/16*batch_size
+  crop_size: 512
+  task: 'od'
+  dataset: 'sup'
+  data_root: './data/fundus_datasets/od_oc/WACV/REFUGE_cross_new/'
+  backbone: 'resnet50'
+  model: 'deeplabv3plus'
+  labeled_id_path: 'dataset/splits/sup/ORIGA100_labeled.txt'

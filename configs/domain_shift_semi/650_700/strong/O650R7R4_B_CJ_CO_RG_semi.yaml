@@ -1,0 +1,30 @@
+info:
+  setting: ''
+  description: 'semi_GAMMA100+REFUGE700'
+aug:
+  strong:
+    default: False
+    blur: True
+    ColorJitter: True
+    cutout: True
+    RandomGrayscale: True
+MODEL:
+  sup: False
+  NUM_CLASSES: 2
+  batch_size: 8
+  epochs: 100
+  lr: 0.002 # 0.004/16*batch_size
+  crop_size: 512
+  dataset: 'semi'
+  data_root: './data/fundus_datasets/od_oc/WACV/REFUGE_cross_new/'
+  backbone: 'resnet50'
+  model: 'deeplabv3plus'
+  labeled_id_path: 'dataset/splits/semi/GAMMA100_labeled.txt'
+  unlabeled_id_path: 'dataset/splits/semi/REFUGE700_unlabeled.txt'
+  pseudo_mask_path: 'experiments/domain_shift_semi/G1R7R4_semi/pseudo_masks'
+  stage1: False
+  stage1_ckpt_path: 'experiments/sup/GAMMA100_sup/models/train_mIoUTdeeplabv3plus_resnet50_90.10.pth'
+  stage2: False
+  stage3: False
+  stage4: True
+  stage5: False
