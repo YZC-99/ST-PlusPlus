@@ -61,7 +61,6 @@ def write_config(cfg, file):
 def main(args):
     cfg.merge_from_file(args.config_file)
 
-
     # experiments_path = 'experiments/{}'.format(args.config_file.split('/')[1:-1])
     experiments_path = 'experiments/{}'.format('/'.join(args.config_file.split('/')[1:-1]))
     now_experiment_path = os.path.join(experiments_path,args.config_file.split('/')[-1].split('.')[0])

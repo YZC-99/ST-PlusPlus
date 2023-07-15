@@ -23,7 +23,7 @@ MODEL:
   logs_path: 'experiments/semi/strong/G1R7R4_B_CJ_semi/logs'
   save_path: 'experiments/semi/strong/G1R7R4_B_CJ_semi/models'
   stage1: False
-  stage1_ckpt_path: 'experiments/sup/REFUGE100_sup/models/train_mIoUTdeeplabv3plus_resnet50_93.67.pth'
+  stage1_ckpt_path: 'experiments/sup/GAMMA100_sup/models/train_mIoUTdeeplabv3plus_resnet50_93.67.pth'
   stage2: False
   stage3: False
   stage4: True
